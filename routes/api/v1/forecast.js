@@ -7,17 +7,18 @@ const database = require('knex')(configuration);
 const fetch = require('node-fetch');
 
 const helpers = require('../../../helpers/helpers');
-const fetchForecast = helpers.fetchForecast;
-// .where('user_id', getUser(request.body.api_key)).where('location', request.body.location)
+const getForecast = helpers.apiForecast;
+
 router.get('/', (request, response) => {
-  database('users').where('api_key', request.body.api_key)
-    .then(users => {
-      if (users.length) {
-        fetchForecast(request.query)
-          .then(data => response.status(200).send(data))
-          .catch(reason => response.send(reason.message))
+  const userApiKey = request.body.api_key;
+  database("users").where("api_key", userApiKey)
+    .then(user => {
+      if (user[0]) {
+        getForecast(request.query.location)
+          .then(forecast => response.status(200).send(forecast))
       } else {
-        response.status(401).json({error: "Unauthorized: missing or invalid API key"});
+        response.status(401).json({
+          error: "Unauthorized: missing or invalid API key"});
       }
     })
     .catch(error => {
@@ -25,6 +26,5 @@ router.get('/', (request, response) => {
     });
 });
 
-// Could create const all = () => database('papers')
-//   .select()
+
 module.exports = router
