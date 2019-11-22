@@ -1,3 +1,6 @@
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('../knexfile')[environment];
+const database = require('knex')(configuration);
 const fetch = require("node-fetch");
 
 async function apiCoordinates(location) {
@@ -7,7 +10,9 @@ async function apiCoordinates(location) {
 }
 
 async function apiForecast(coordinates) {
-  let response = await fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coordinates.lat},${coordinates.lng}`);
+  let lat = coordinates.lat
+  let long = coordinates.lng
+  let response = await fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${lat},${long}?exclude=minutely,alerts,flags`);
   let forecast = await response.json();
   return forecast;
 }
