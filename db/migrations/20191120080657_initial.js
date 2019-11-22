@@ -11,7 +11,7 @@ exports.up = function(knex) {
     knex.schema.createTable('favorites', function(table) {
       table.increments('id').primary();
       table.string('location');
-      table.integer('user_id').unsigned()
+      table.integer('user_id').unsigned();
       table.foreign('user_id')
         .references('users.id');
 
@@ -22,7 +22,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return Promise.all([
-    knex.schema.dropTable('users'),
-    knex.schema.dropTable('favorites')
+    knex.schema.dropTable('favorites'),
+    knex.schema.dropTable('users')
   ])
 };
