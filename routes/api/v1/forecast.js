@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var forecastObject = require('../../../models/forecast.js');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('../../../knexfile')[environment];
@@ -7,14 +8,14 @@ const database = require('knex')(configuration);
 const fetch = require('node-fetch');
 
 const helpers = require('../../../helpers/helpers');
-const getForecast = helpers.apiForecast;
+const formattedForecast = helpers.formatForecast;
 
 router.get('/', (request, response) => {
   const userApiKey = request.body.api_key;
   database("users").where("api_key", userApiKey)
     .then(user => {
       if (user[0]) {
-        getForecast(request.query.location)
+        formattedForecast(request.query.location)
           .then(forecast => response.status(200).send(forecast))
       } else {
         response.status(401).json({
