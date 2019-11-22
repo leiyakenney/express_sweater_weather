@@ -145,6 +145,7 @@ body:
    ```
 **3.** `GET /api/v1/favorites`
    * Summary: Returns a current forecast for all favorited locations.
+   * **Please note:** This endpoint does not currently return the weather data, but does return a list of the favorited locations
    * Headers: 
    ```
    Content-Type: application/json
