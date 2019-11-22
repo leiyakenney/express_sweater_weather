@@ -32,12 +32,35 @@ async function formatForecast(location) {
 
 
 async function userByKey(apiKey) {
-  return database.select('id').from('users').where('api_key', apiKey).first()
+  return database.select("id").from("users").where("api_key", apiKey).first()
+}
+
+async function favLocations(apiKey) {
+  let userId = await userByKey(apiKey);
+  let favorites = await database("favorites").where("user_id", userId);
+  const locations = await favorites.map(x => x.location);
+  return locations;
+}
+
+async function fetchForecastFav(address) {
+  let forecast = await fetchForecast(address);
+  let currentForecast = await forecast.currently
+  return currentForecast;
+};
+
+async function getFavForecasts(apiKey) {
+  let locations = await favLocations(apiKey);
+  let forecasts = await getForecasts(locations)
+  console.log(forecasts)
+  return forecasts;
 }
 
 module.exports = {
   apiCoordinates: apiCoordinates,
   apiForecast: apiForecast,
   formatForecast: formatForecast,
-  userByKey: userByKey
+  userByKey: userByKey,
+  favLocations: favLocations,
+  getFavForecasts: getFavForecasts,
+  fetchForecastFav: fetchForecastFav
 }
