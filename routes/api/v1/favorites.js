@@ -8,6 +8,7 @@ const database = require('knex')(configuration);
 
 const helpers = require('../../../helpers/helpers');
 const formattedForecast = helpers.formatForecast;
+const findUser = helpers.userByKey;
 
 router.get('/', (request, response) => {
   const userApiKey = request.body.api_key;
@@ -21,11 +22,10 @@ router.get('/', (request, response) => {
         .catch(error => {response.status(500).json({ error });
       });
     } else {
-      return response.status(401).json({ error: "Unauthorized: invalid or missing API key" });
+      return response.status(401).json({ error: "Unauthorized: invalid or missing API Key" });
     }
   });
 });
-
 
 router.post('/', (request, response) => {
   (async () => {
