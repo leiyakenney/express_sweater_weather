@@ -30,8 +30,14 @@ async function formatForecast(location) {
   return formattedForecast;
 }
 
+
+async function userByKey(apiKey) {
+  return database.select('id').from('users').where('api_key', apiKey).first()
+}
+
 module.exports = {
   apiCoordinates: apiCoordinates,
   apiForecast: apiForecast,
-  formatForecast: formatForecast
+  formatForecast: formatForecast,
+  userByKey: userByKey
 }
