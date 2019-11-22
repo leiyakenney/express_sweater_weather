@@ -20,7 +20,7 @@ async function apiForecast(location) {
   let coords = await coordinates(location);
   // let lat = await coordinates.lat;
   // let long = await coordinates.lng;
-  let response = await fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coords.lat},${coords.lng}`);
+  let response = await fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_API_KEY}/${coords.lat},${coords.lng}?exclude=minutely,alerts,flags`);
   let forecast = await response.json();
   return forecast;
 }
